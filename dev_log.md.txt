@@ -1,0 +1,52 @@
+Day 1:
+
+What did i build?
+Built the first version of task forge and created a user input interface.
+
+What confused me?
+I had a silly moment where i answered the question the code was asking, in the code xD so it gave back 2 answers. Lol
+
+What did i learn?
+Variables store information entered by the user.
+
+Day 10 (ish) (i missed alot of entries....woops)
+
+what did i build?
+I refactored Taskforge from primitive strings to structured objects using dictionaries rather than only strings
+
+What confused me?
+All of it, but i reasoned through with minimal help regarding syntax from my tutor, mainly help regarding order/structure.
+
+What did i learn?
+Disctionaries, data types, keys and values, boolean comparisons, converting file data back into objects 
+and how to think outside of the code
+
+Day 11 (ish)
+
+what did i build?
+I didnt do much tonight, but i added a new function get_priority.  I wrote it 90% on my own with only some help with syntax from my tutor.
+
+what confused me?
+honestly, not alot, i wrote most of it my own, but the tired brain made it take a little longer than i would have liked.  (It's 11:30pm rn xD)
+
+What did i learn?
+How to notice and re-use code ive already written in other functions (if it applies to the new function, of course) 
+
+day 12 (ish)
+
+what i build?
+I built the framework for the new xp system, using a differnt file to save the new data, which will also be used alot in the future for other stats etc.  xp is rewarded upon completing a task, 
+with differing amounts relative to the priorty of the task. Still the main loop to fix though, but its late and im tired, so bedtime it is!!
+
+What confused me?
+i had to edit complete_task a little to have it return the correct things, idk if it was my tired brain or what, but i got quite stuck here and had
+to ask my tutor quite alot of questions, ill try and understand it more tomorrow, with a freshly rested mind.
+
+What did i learn?
+i work worse when im tired lmao.  no but seriously, i learnt that utilising code youve already written, makes things 1000000 times easier my god,
+i basically just copied my other fucntions and changed them slightly to accomadate the new file/data etc etc.  GOOD FUN!
+
+day 13(ish)
+
+what did i learn? 
+i learnt im useless while tired, 11:30pm again and im going to bed xDDD GGWP
