@@ -1,5 +1,7 @@
 # TaskForge
 
+## Current version: v0.1
+
 TaskForge is a command-line productivity app built in Python that turns completing real-life tasks into an RPG-style progression system.
 
 ## Features
