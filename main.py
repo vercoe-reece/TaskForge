@@ -2,20 +2,36 @@ print("====================")
 print("     TASKFORGE      ")
 print("====================")
 
-def save_xp(total_xp):
-    try:
-        with open("stats.txt", "w") as file:
-            file.write(str(total_xp))
-    except:
-        print("There was a problem saving your xp")
+from datetime import date
+from datetime import date, timedelta
 
-def load_xp():
+def save_stats(stats):
     try:
-        with open("stats.txt", "r") as file:
-            rawxp = file.read()
-            return (int(rawxp))
-    except:
-        return 0 
+        with open("stats.txt", "w", encoding="utf-8") as file:
+            file.write(str(stats["xp"]) + "|" + str(stats["streak"]) + "|" + str(stats["last_completed_date"]))
+    except Exception as error:
+        print("There was a problem saving your xp:", error)
+
+def load_stats():
+    try:
+        with open("stats.txt", "r", encoding="utf-8") as file:
+
+            rawstats = file.read()
+            stats = rawstats.strip()
+            parts = stats.split("|")
+            stripped_stat = {
+                "xp": int(parts[0]),
+                "streak": int(parts[1]),
+                "last_completed_date": parts[2]
+                }
+            return stripped_stat
+    except Exception as error:
+        print("There was a problem loading your stats:", error)
+        return {
+            "xp": 0,
+            "streak": 0,
+            "last_completed_date":""
+        }
           
 def calculate_xp(priority):
 
@@ -27,7 +43,31 @@ def calculate_xp(priority):
         return 25
     else:
         return 0
-    
+
+def calc_streak(stats):
+
+    today = date.today()
+    yesterday = today - timedelta(days=1)
+
+    if not stats["last_completed_date"]:
+        stats["streak"] = 1
+        stats["last_completed_date"] = str(today)
+        return
+
+    last_completed = date.fromisoformat(stats["last_completed_date"])
+
+    if last_completed == yesterday:
+        stats["streak"] += 1 
+        stats["last_completed_date"] = str(today)
+        return 
+
+    if last_completed == today:
+        return
+
+    stats["streak"] = 1
+    stats["last_completed_date"] = str(today)
+
+
 def load_tasks():
     tasks = []
     try: 
@@ -120,8 +160,11 @@ def complete_task(tasks):
 
         if 0 <= task_number <len(tasks):
             completed_task = tasks[task_number]
+            if completed_task["completed"]:
+                print("This task is already completed")
+                return False
+
             completed_task["completed"] = True
-                  
             return completed_task
 
         print("Please choose a valid task")
@@ -155,8 +198,8 @@ def say_goodbye():
 
     print("Goodbye!")
 
+stats = load_stats()
 tasks = load_tasks()
-total_xp = load_xp()
 
 while True:
 
@@ -181,17 +224,16 @@ while True:
 
         if completed_task:
             earned_xp = calculate_xp(completed_task["priority"])
-            total_xp += earned_xp
+            stats["xp"] += earned_xp
+            calc_streak(stats)
             save_tasks(tasks)
-            save_xp(total_xp)
+            save_stats(stats)
+            
 
             print("🎉 Task completed!")
             print("⭐ +", earned_xp, "XP")
-            print("⭐ Total XP:", total_xp)
-
-        else:
-            print("There was a problem completing your task")
-            
+            print("⭐ Total XP:", stats["xp"])
+            print("🔥 Current Streak:", stats["streak"])    
         
     elif choice == "4":
         if delete_task(tasks):
@@ -203,5 +245,3 @@ while True:
 
     else:
         print("That isn't a valid option.")
-
-

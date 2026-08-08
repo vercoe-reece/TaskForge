@@ -1,5 +1,5 @@
 1.completed tasks       (DONE)
-2.priority tasks        (90% there)
+2.priority tasks        (DONE)
 3.due dates
 4.task notes
 5.task search

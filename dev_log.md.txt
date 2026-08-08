@@ -50,3 +50,18 @@ day 13(ish)
 
 what did i learn? 
 i learnt im useless while tired, 11:30pm again and im going to bed xDDD GGWP
+
+day 14 (ish)
+
+what did i build?
+Made the final adjustments to the main loop to incorporate the various XP tracking/saving functions i created over the past couple of evenings, all done, all working as intended.
+Much room for further additions though, im excited for the future and seeing where this project can go. 🔥
+
+What did i learn?
+had a much more productive day today.  I learnt the fundamentals of Git/GitHub, finished my xp system, debugged a data error, and uploaded the project (thus far)
+onto Github/Linkedin.  Feeling good about today.
+
+What confused me?
+the data error threw me abit but my tutor taught me a neat little trick to force python to save the data in a specific way so it doesnt get confused.  will
+defo use that again in the future.
+
