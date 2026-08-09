@@ -253,7 +253,31 @@ def delete_task(tasks):
         else:
             print("Please choose a valid task")
             return False
+
+def search_tasks(tasks):
+    search = input("Enter the keyword you'd like to search for: \n >>>").lower()
+    found = False
     
+    print("🖊   Search results:")
+    print("---------------")
+
+    for task in tasks:
+        if search in task["text"].lower() or search in task["notes"].lower():
+            if task["completed"]:
+                status = "✅"
+            else:
+                status = "🔳"
+            print(status, task["text"], task["priority"], task["category"])
+            if task["notes"]:
+                print("     📔", task["notes"])
+            if task["due_date"]:
+                print("     📅 Due:", task["due_date"])
+            print()
+            found = True
+
+    if not found:
+        print("No matching tasks found")
+  
 def say_goodbye():
 
     print("Goodbye!")
@@ -265,9 +289,10 @@ while True:
 
     print("1. Add Task")
     print("2. View Tasks")
-    print("3. Complete Task")
-    print("4. Delete Task")
-    print("5. Exit")
+    print("3. Search Tasks")
+    print("4. Complete Task")
+    print("5. Delete Task")
+    print("6. Exit")
 
     choice = input("Choose an option:")
 
@@ -280,6 +305,9 @@ while True:
         view_tasks(tasks)
 
     elif choice == "3":
+        search_tasks(tasks)
+
+    elif choice == "4":
         completed_task = complete_task(tasks)
 
         if completed_task:
@@ -294,11 +322,11 @@ while True:
             print("⭐ Total XP:", stats["xp"])
             print("🔥 Current Streak:", stats["streak"])    
         
-    elif choice == "4":
+    elif choice == "5":
         if delete_task(tasks):
             save_tasks(tasks)
 
-    elif choice == "5":
+    elif choice == "6":
         say_goodbye()
         break 
 

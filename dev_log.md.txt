@@ -65,3 +65,15 @@ What confused me?
 the data error threw me abit but my tutor taught me a neat little trick to force python to save the data in a specific way so it doesnt get confused.  will
 defo use that again in the future.
 
+day 17 (or something or other, i missed some days)
+
+What i build?
+Did alot today/over the past few days, added task searching, due dates, notes and categories.  very productive day, happy with myself!
+
+What did i learn?
+I learnt alot tbh, cemented dictionaries in my brain and how to keep adding to them, learnt .lower() for case incensitive searching etc. learnt how to search data
+for specific keywords and boolean flags.  lots of progress!!
+
+What confused me?
+Honestly?  not a great deal...may sound like im floating my own boat, but i feel like its all really sinking in now, both the syntax and how to structure my code. 
+or at least, i think it is? xD

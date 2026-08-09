@@ -14,13 +14,13 @@ TaskForge is a command-line productivity app built in Python that turns completi
 - 📅 Due dates
 - 📝 Task notes
 - 📦 Categories
+- 🔍 Task search
 
 ## Planned Features
 
 - 📈 Level system
 - 🏆 Achievements
 - 📊 Statistics dashboard
-- 🔍 Task search
 
 ## Why I Built This
 
