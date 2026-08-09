@@ -1,12 +1,12 @@
 1.completed tasks                   (DONE)
 2.priority tasks                    (DONE)
-3.due dates
-4.task notes
+3.due dates                         (DONE)
+4.task notes                        (DONE)
 5.task search
 6.categories
 7.stats                            (kinda done)
 8.reminders
 9.productivity streak (MY FAV)     (DONE)
-10.X FKN P BABYYYYYYYY             (DONE)
+10.XP BABYYYYYYYY                  (DONE)
 11.Achievements
-12.FKN CASSSSSS
+12.CASSSSSS (GM etc)

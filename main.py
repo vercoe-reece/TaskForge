@@ -79,11 +79,16 @@ def load_tasks():
                     notes = parts[3]
                 else:
                     notes = ""
+                if len(parts)>= 5:
+                    due = parts[4]
+                else:
+                    due = ""
                 stripped_task = {
                     "text": parts[0],
                     "completed": parts[1] == "True",
                     "priority": parts[2],
-                    "notes": notes
+                    "notes": notes,
+                    "due_date": due
                 }  
                 tasks.append(stripped_task)
             return tasks
@@ -95,20 +100,33 @@ def save_tasks(tasks):
     try:
         with open("tasks.txt", "w", encoding="utf-8") as file:
             for task in tasks:
-                file.write(task["text"] + "|" + str(task["completed"]) + "|" + (task["priority"]) + "|" + (task["notes"]) + "\n")
+                file.write(task["text"] + "|" + str(task["completed"]) + "|" + (task["priority"]) + "|" + (task["notes"]) + "|" + (task["due_date"]) + "\n")
     except Exception as error:
         print("There was a problem saving your tasks", error)
 
+def get_due_date():
+    while True:
+        due = input("Add an optional due date for your task: \n ie: YYYY-MM-DD \n >>>")
+        if not due:
+            return ""
+        try:
+            date.fromisoformat(due)
+            return due
+        except ValueError:
+            print("Please enter a valid format: YYYY-MM-DD")
+            
 def get_task():
     while True:
         task = input("Enter a task: \n>>>")
         notes = input("Add any notes associated with the task: \n>>>")
+        due = get_due_date()
         priority = get_priority()
         new_task = {
             "text": task,
             "completed": False,
             "priority": priority,
-            "notes": notes
+            "notes": notes,
+            "due_date": due
         }
 
         return new_task
@@ -149,6 +167,15 @@ def view_tasks(tasks):
         print(status, number, ".", task["text"], task["priority"])
         if task["notes"]:
             print("    📝", task["notes"])
+        if task["due_date"]:
+            due_date = date.fromisoformat(task["due_date"])
+            today = date.today()
+            print("    📅 Due:", task["due_date"])
+            if not task["completed"]:
+                if due_date < today:
+                    print("⚠  Overdue!")
+                elif due_date == today:
+                    print("Due Today!")
 
 def complete_task(tasks):
 
@@ -237,7 +264,6 @@ while True:
             save_tasks(tasks)
             save_stats(stats)
             
-
             print("🎉 Task completed!")
             print("⭐ +", earned_xp, "XP")
             print("⭐ Total XP:", stats["xp"])
