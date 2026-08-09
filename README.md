@@ -10,16 +10,17 @@ TaskForge is a command-line productivity app built in Python that turns completi
 - ⭐ XP rewards based on task priority
 - 🔴 High / 🟠 Medium / 🟢 Low priorities
 - 💾 Automatic save/load functionality
+- 🔥 Daily streaks
+- 📅 Due dates
+- 📝 Task notes
+- 📦 Categories
 
 ## Planned Features
 
-- 🔥 Daily streaks
 - 📈 Level system
 - 🏆 Achievements
 - 📊 Statistics dashboard
-- 📅 Due dates
 - 🔍 Task search
-- 📝 Task notes
 
 ## Why I Built This
 

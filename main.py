@@ -83,12 +83,17 @@ def load_tasks():
                     due = parts[4]
                 else:
                     due = ""
+                if len(parts)>= 6:
+                    category = parts[5]
+                else:
+                    category = "📦 Other"
                 stripped_task = {
                     "text": parts[0],
                     "completed": parts[1] == "True",
                     "priority": parts[2],
                     "notes": notes,
-                    "due_date": due
+                    "due_date": due,
+                    "category": category
                 }  
                 tasks.append(stripped_task)
             return tasks
@@ -100,7 +105,7 @@ def save_tasks(tasks):
     try:
         with open("tasks.txt", "w", encoding="utf-8") as file:
             for task in tasks:
-                file.write(task["text"] + "|" + str(task["completed"]) + "|" + (task["priority"]) + "|" + (task["notes"]) + "|" + (task["due_date"]) + "\n")
+                file.write(task["text"] + "|" + str(task["completed"]) + "|" + (task["priority"]) + "|" + (task["notes"]) + "|" + (task["due_date"]) + "|" + (task["category"]) + "\n")
     except Exception as error:
         print("There was a problem saving your tasks", error)
 
@@ -121,15 +126,35 @@ def get_task():
         notes = input("Add any notes associated with the task: \n>>>")
         due = get_due_date()
         priority = get_priority()
+        category = get_category()
         new_task = {
             "text": task,
             "completed": False,
             "priority": priority,
             "notes": notes,
-            "due_date": due
+            "due_date": due,
+            "category": category
         }
 
         return new_task
+
+def get_category():
+    while True:
+        category = input("Choose which category you'd like to add the task to: \n 1. 💼 Work \n 2. 📚 Learning \n 3. 🏠 Personal \n 4. 💪 Health \n 5. 💻 Projects \n 6. 📦 Other")
+        if category == "1":
+            return "💼 Work"
+        elif category == "2":
+            return "📚 Learning"
+        elif category == "3":
+            return "🏠 Personal"
+        elif category == "4":
+            return "💪 Health"
+        elif category == "5":
+            return "💻 Projects"
+        elif category == "6":
+            return "📦 Other"
+        else:
+            print("Please choose a valid number")
 
 def get_priority():
     while True:
@@ -164,7 +189,7 @@ def view_tasks(tasks):
             status = "[✅]"
         else:
             status = "[🔳]"
-        print(status, number, ".", task["text"], task["priority"])
+        print(status, number, ".", task["text"], task["priority"], task["category"])
         if task["notes"]:
             print("    📝", task["notes"])
         if task["due_date"]:
