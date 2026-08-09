@@ -67,7 +67,6 @@ def calc_streak(stats):
     stats["streak"] = 1
     stats["last_completed_date"] = str(today)
 
-
 def load_tasks():
     tasks = []
     try: 
@@ -76,10 +75,15 @@ def load_tasks():
             for task in rawtasks:
                 task = task.strip()
                 parts = task.split("|")
+                if len(parts)>= 4:
+                    notes = parts[3]
+                else:
+                    notes = ""
                 stripped_task = {
                     "text": parts[0],
                     "completed": parts[1] == "True",
-                    "priority": parts[2]
+                    "priority": parts[2],
+                    "notes": notes
                 }  
                 tasks.append(stripped_task)
             return tasks
@@ -91,18 +95,20 @@ def save_tasks(tasks):
     try:
         with open("tasks.txt", "w", encoding="utf-8") as file:
             for task in tasks:
-                file.write(task["text"] + "|" + str(task["completed"]) + "|" + (task["priority"]) + "\n")
+                file.write(task["text"] + "|" + str(task["completed"]) + "|" + (task["priority"]) + "|" + (task["notes"]) + "\n")
     except Exception as error:
         print("There was a problem saving your tasks", error)
 
 def get_task():
     while True:
         task = input("Enter a task: \n>>>")
+        notes = input("Add any notes associated with the task: \n>>>")
         priority = get_priority()
         new_task = {
             "text": task,
             "completed": False,
-            "priority": priority
+            "priority": priority,
+            "notes": notes
         }
 
         return new_task
@@ -141,6 +147,8 @@ def view_tasks(tasks):
         else:
             status = "[🔳]"
         print(status, number, ".", task["text"], task["priority"])
+        if task["notes"]:
+            print("    📝", task["notes"])
 
 def complete_task(tasks):
 
