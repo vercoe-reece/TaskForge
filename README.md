@@ -15,12 +15,12 @@ TaskForge is a command-line productivity app built in Python that turns completi
 - 📝 Task notes
 - 📦 Categories
 - 🔍 Task search
+- 📊 Statistics dashboard
 
 ## Planned Features
 
 - 📈 Level system
 - 🏆 Achievements
-- 📊 Statistics dashboard
 
 ## Why I Built This
 

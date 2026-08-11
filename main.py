@@ -220,13 +220,22 @@ def view_tasks(tasks):
                     print("Due Today!")
 
 def view_stats(tasks, stats):
+    today_string = str(date.today())
+    today = date.today()
+    week_start = today - timedelta(days=today.weekday())
     total_tasks = len(tasks)
     completed_tasks = 0
     high_prio = 0
     medium_prio = 0
     low_prio = 0
     completed_today = 0
-    today = str(date.today())
+    most_tasks_day = 0
+    xp_today = 0
+    most_xp_day = 0
+    completed_this_week = 0
+    xp_this_week = 0
+    days_this_week = today.weekday() +1
+    xp_by_date = {}
     completion_dates = {}
     category_counts = {
         "💼 Work": 0,
@@ -248,19 +257,40 @@ def view_stats(tasks, stats):
             elif task["priority"] == "🟢 Low":
                 low_prio += 1
             category_counts[task["category"]] += 1
-        if task["completed_date"] == today:
+        if task["completed_date"] == today_string:
             completed_today += 1
+            xp_today += calculate_xp(task["priority"])
         if task["completed_date"]:
             if task["completed_date"] in completion_dates:
                 completion_dates[task["completed_date"]] +=1
             else:
                 completion_dates[task["completed_date"]] = 1
+        if task["completed_date"]:
+            if task["completed_date"] in xp_by_date:
+                xp_by_date[task["completed_date"]] += calculate_xp(task["priority"])
+            else:
+                xp_by_date[task["completed_date"]] = calculate_xp(task["priority"])
+        if task["completed_date"]:
+            task_date = date.fromisoformat(task["completed_date"])
+
+            if task_date >= week_start and task_date <= today:
+                completed_this_week += 1
+                xp_this_week += calculate_xp(task["priority"])
+        
+    for completed_date in xp_by_date:
+        if xp_by_date[completed_date] > most_xp_day:
+            most_xp_day = xp_by_date[completed_date]
+
+    for completed_date in completion_dates:
+        if completion_dates[completed_date] > most_tasks_day:
+            most_tasks_day = completion_dates[completed_date]
             
     remaining_tasks = total_tasks - completed_tasks
 
     if total_tasks > 0:
         completion_rate = completed_tasks / total_tasks * 100
         completion_rate = round(completion_rate)
+        daily_average = round(completed_this_week / days_this_week, 1)
     else:
         completion_rate = 0
 
@@ -273,8 +303,18 @@ def view_stats(tasks, stats):
     if total_tasks > 0:
         print("✅ Tasks Completed:", completed_tasks)
         print("📓 Tasks Remaining:", remaining_tasks)
-        print("📅 Tasks Completed Today:", completed_today)
         print("📈 Completion Rate:", str(completion_rate) + "%")
+        print("==================")
+        print("📅 Today")
+        print("📅 Tasks Completed Today:", completed_today)
+        print("📑 Most Tasks In One Day:", most_tasks_day)
+        print("⭐ XP Earned Today:", xp_today)
+        print("💰 Most XP In One Day:", most_xp_day)
+        print("📊 Daily Average:", daily_average, "tasks")
+        print("==================")
+        print("📆 This Week")
+        print("👀 XP Earned This Week:", xp_this_week)
+        print("📈 Tasks Completed This Week:", completed_this_week)
         print("==================")
         print("🎯 Priorities")
         print("🔴 High Remaining:", high_prio)
@@ -284,8 +324,6 @@ def view_stats(tasks, stats):
         print("📦 Categories")
         for category in category_counts:
             print(category, category_counts[category])
-
-        print(completion_dates)
 
     else:
         print("😢 No task stats available")

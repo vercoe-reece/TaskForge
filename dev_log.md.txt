@@ -77,3 +77,16 @@ for specific keywords and boolean flags.  lots of progress!!
 What confused me?
 Honestly?  not a great deal...may sound like im floating my own boat, but i feel like its all really sinking in now, both the syntax and how to structure my code. 
 or at least, i think it is? xD
+
+day 18 (ish, ive lost track completely now)
+
+what did i build?
+Felt like alot today, massively expanded the stats dashboard so it shows all kinds of stats such as total tasks completed, the priority of tasks remaining, the category of those tasks,
+longest streak, task completion rate etc etc.  Happy with how much i did.
+
+what did i learn?
+cemented alot of yesterdays learning by using it in practice.  more dictionaries, more key value pairs, just more python tbh, starting to get the hang of it now....i think xD
+
+what confused me?
+Its late right now and my brain just isnt working again xD got stuck on creating/replacing dictionary keys...point about my brain not working, proven....BED TIME!
+Overall happy with the progress today though, its starting to take shape!!
