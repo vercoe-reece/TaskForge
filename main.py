@@ -5,78 +5,9 @@ print("====================")
 from datetime import date
 from datetime import date, timedelta
 
-def save_stats(stats):
-    try:
-        with open("stats.txt", "w", encoding="utf-8") as file:
-            file.write(str(stats["xp"]) + "|" + str(stats["streak"]) + "|" + str(stats["last_completed_date"]) + "|" + str(stats["longest_streak"]))
-    except Exception as error:
-        print("There was a problem saving your xp:", error)
-
-def load_stats():
-    try:
-        with open("stats.txt", "r", encoding="utf-8") as file:
-            rawstats = file.read()
-            stats = rawstats.strip()
-            parts = stats.split("|")
-            if len(parts)>= 4:
-                longest_streak = int(parts[3])
-            else:
-                longest_streak = int(parts[1])
-            stripped_stat = {
-                "xp": int(parts[0]),
-                "streak": int(parts[1]),
-                "last_completed_date": parts[2],
-                "longest_streak": longest_streak
-                }
-            return stripped_stat
-    except Exception as error:
-        print("There was a problem loading your stats:", error)
-        return {
-            "xp": 0,
-            "streak": 0,
-            "last_completed_date":"",
-            "longest_streak": 0
-        }
-          
-def calculate_xp(priority):
-
-    if priority == "🔴 High":
-        return 100
-    elif priority ==  "🟠 Medium":
-        return 50
-    elif priority == "🟢 Low":
-        return 25
-    else:
-        return 0
-
-def calc_streak(stats):
-
-    today = date.today()
-    yesterday = today - timedelta(days=1)
-
-    if not stats["last_completed_date"]:
-        stats["streak"] = 1
-        if stats["streak"] > stats["longest_streak"]:
-            stats["longest_streak"] = stats["streak"]
-        stats["last_completed_date"] = str(today)
-        return
-
-    last_completed = date.fromisoformat(stats["last_completed_date"])
-
-    if last_completed == yesterday:
-        stats["streak"] += 1
-        if stats["streak"] > stats["longest_streak"]:
-            stats["longest_streak"] = stats["streak"] 
-        stats["last_completed_date"] = str(today)
-        return 
-
-    if last_completed == today:
-        return
-
-    stats["streak"] = 1
-    if stats["streak"] > stats["longest_streak"]:
-        stats["longest_streak"] = stats["streak"]
-    stats["last_completed_date"] = str(today)
+# =======================
+# DATA STORAGE
+# =======================
 
 def load_tasks():
     tasks = []
@@ -125,17 +56,43 @@ def save_tasks(tasks):
     except Exception as error:
         print("There was a problem saving your tasks", error)
 
-def get_due_date():
-    while True:
-        due = input("Add an optional due date for your task: \n ie: YYYY-MM-DD \n >>>")
-        if not due:
-            return ""
-        try:
-            date.fromisoformat(due)
-            return due
-        except ValueError:
-            print("Please enter a valid format: YYYY-MM-DD")
-            
+def load_stats():
+    try:
+        with open("stats.txt", "r", encoding="utf-8") as file:
+            rawstats = file.read()
+            stats = rawstats.strip()
+            parts = stats.split("|")
+            if len(parts)>= 4:
+                longest_streak = int(parts[3])
+            else:
+                longest_streak = int(parts[1])
+            stripped_stat = {
+                "xp": int(parts[0]),
+                "streak": int(parts[1]),
+                "last_completed_date": parts[2],
+                "longest_streak": longest_streak
+                }
+            return stripped_stat
+    except Exception as error:
+        print("There was a problem loading your stats:", error)
+        return {
+            "xp": 0,
+            "streak": 0,
+            "last_completed_date":"",
+            "longest_streak": 0
+        }
+
+def save_stats(stats):
+    try:
+        with open("stats.txt", "w", encoding="utf-8") as file:
+            file.write(str(stats["xp"]) + "|" + str(stats["streak"]) + "|" + str(stats["last_completed_date"]) + "|" + str(stats["longest_streak"]))
+    except Exception as error:
+        print("There was a problem saving your xp:", error)
+
+# =======================
+# TASK INPUT AND VALIDATION
+# =======================
+
 def get_task():
     while True:
         task = input("Enter a task: \n>>>")
@@ -173,6 +130,17 @@ def get_category():
         else:
             print("Please choose a valid number")
 
+def get_due_date():
+    while True:
+        due = input("Add an optional due date for your task: \n ie: YYYY-MM-DD \n >>>")
+        if not due:
+            return ""
+        try:
+            date.fromisoformat(due)
+            return due
+        except ValueError:
+            print("Please enter a valid format: YYYY-MM-DD")
+
 def get_priority():
     while True:
         priority = input("Choose the priority of your task: \n 1. 🔴 High \n 2. 🟠 Medium \n 3. 🟢 Low \n\n>")
@@ -185,114 +153,195 @@ def get_priority():
         else:
             print("Please choose a valid number")
 
-def add_task(tasks, task):
+# =======================
+# STATS / XP / STREAKS
+# =======================
 
-    tasks.append(task)
-    print("Task added:", task["text"], task["priority"])
-    print("Your task has been saved!")
+def calculate_xp(priority):
 
-def view_tasks(tasks):
+    if priority == "🔴 High":
+        return 100
+    elif priority ==  "🟠 Medium":
+        return 50
+    elif priority == "🟢 Low":
+        return 25
+    else:
+        return 0
 
-    if not tasks:
-        print("You dont have any tasks yet!")
-        return
-    
-    print("\n📋Your tasks")
-    print("----------")
+def calc_streak(stats):
 
-    for number, task in enumerate(tasks, 1):
-
-        if task["completed"]:
-            status = "[✅]"
-        else:
-            status = "[🔳]"
-        print(status, number, ".", task["text"], task["priority"], task["category"])
-        if task["notes"]:
-            print("    📝", task["notes"])
-        if task["due_date"]:
-            due_date = date.fromisoformat(task["due_date"])
-            today = date.today()
-            print("    📅 Due:", task["due_date"])
-            if not task["completed"]:
-                if due_date < today:
-                    print("⚠  Overdue!")
-                elif due_date == today:
-                    print("Due Today!")
-
-def view_stats(tasks, stats):
-    today_string = str(date.today())
     today = date.today()
-    week_start = today - timedelta(days=today.weekday())
-    total_tasks = len(tasks)
+    yesterday = today - timedelta(days=1)
+
+    if not stats["last_completed_date"]:
+        stats["streak"] = 1
+        if stats["streak"] > stats["longest_streak"]:
+            stats["longest_streak"] = stats["streak"]
+        stats["last_completed_date"] = str(today)
+        return
+
+    last_completed = date.fromisoformat(stats["last_completed_date"])
+
+    if last_completed == yesterday:
+        stats["streak"] += 1
+        if stats["streak"] > stats["longest_streak"]:
+            stats["longest_streak"] = stats["streak"] 
+        stats["last_completed_date"] = str(today)
+        return 
+
+    if last_completed == today:
+        return
+
+    stats["streak"] = 1
+    if stats["streak"] > stats["longest_streak"]:
+        stats["longest_streak"] = stats["streak"]
+    stats["last_completed_date"] = str(today)            
+
+def calc_completed_tasks(tasks):
     completed_tasks = 0
+    total_tasks = len(tasks)
+
+    for task in tasks:
+            if task["completed"]:
+                completed_tasks += 1
+
+    remaining_tasks = total_tasks - completed_tasks
+    return completed_tasks, remaining_tasks, total_tasks
+
+def calc_task_prio_stats(tasks):
     high_prio = 0
     medium_prio = 0
     low_prio = 0
-    completed_today = 0
-    most_tasks_day = 0
-    xp_today = 0
-    most_xp_day = 0
-    completed_this_week = 0
-    xp_this_week = 0
-    days_this_week = today.weekday() +1
-    xp_by_date = {}
-    completion_dates = {}
-    category_counts = {
-        "💼 Work": 0,
-        "📚 Learning": 0,
-        "🏠 Personal": 0,
-        "💪 Health": 0,
-        "💻 Projects": 0,
-        "📦 Other": 0
-    }
 
     for task in tasks:
-        if task["completed"]:
-            completed_tasks += 1
-        if not task["completed"]:
-            if task["priority"] == "🔴 High":
-                high_prio += 1
-            elif task["priority"] == "🟠 Medium":
-                medium_prio += 1
-            elif task["priority"] == "🟢 Low":
-                low_prio += 1
-            category_counts[task["category"]] += 1
+            if not task["completed"]:
+                if task["priority"] == "🔴 High":
+                    high_prio += 1
+                elif task["priority"] == "🟠 Medium":
+                    medium_prio += 1
+                elif task["priority"] == "🟢 Low":
+                    low_prio += 1
+
+    return high_prio, medium_prio, low_prio
+
+def calc_task_category_count(tasks):
+
+    category_counts = {
+            "💼 Work": 0,
+            "📚 Learning": 0,
+            "🏠 Personal": 0,
+            "💪 Health": 0,
+            "💻 Projects": 0,
+            "📦 Other": 0
+        }
+
+    for task in tasks:
+            if not task["completed"]:
+                category_counts[task["category"]] += 1
+
+    return category_counts
+
+def calc_completed_today(tasks):
+    today_string = str(date.today())
+    completed_today = 0
+
+    for task in tasks:
         if task["completed_date"] == today_string:
             completed_today += 1
-            xp_today += calculate_xp(task["priority"])
-        if task["completed_date"]:
-            if task["completed_date"] in completion_dates:
-                completion_dates[task["completed_date"]] +=1
-            else:
-                completion_dates[task["completed_date"]] = 1
-        if task["completed_date"]:
-            if task["completed_date"] in xp_by_date:
-                xp_by_date[task["completed_date"]] += calculate_xp(task["priority"])
-            else:
-                xp_by_date[task["completed_date"]] = calculate_xp(task["priority"])
-        if task["completed_date"]:
-            task_date = date.fromisoformat(task["completed_date"])
 
-            if task_date >= week_start and task_date <= today:
-                completed_this_week += 1
-                xp_this_week += calculate_xp(task["priority"])
-        
-    for completed_date in xp_by_date:
-        if xp_by_date[completed_date] > most_xp_day:
-            most_xp_day = xp_by_date[completed_date]
+    return completed_today
+
+def calc_xp_today(tasks):
+    xp_today = 0
+
+    for task in tasks:
+        if task["completed_date"] == str(date.today()):
+            xp_today += calculate_xp(task["priority"])
+
+    return xp_today
+    
+def calc_most_tasks_day(tasks):
+
+    most_tasks_day = 0
+    completion_dates = {}
+
+    for task in tasks:
+            if task["completed_date"]:
+                if task["completed_date"] in completion_dates:
+                    completion_dates[task["completed_date"]] +=1
+                else:
+                    completion_dates[task["completed_date"]] = 1
 
     for completed_date in completion_dates:
-        if completion_dates[completed_date] > most_tasks_day:
-            most_tasks_day = completion_dates[completed_date]
-            
-    remaining_tasks = total_tasks - completed_tasks
+            if completion_dates[completed_date] > most_tasks_day:
+                most_tasks_day = completion_dates[completed_date]
+
+    return most_tasks_day
+
+def calc_most_xp_day(tasks):
+
+    most_xp_day = 0
+    xp_by_date = {}
+
+    for task in tasks:
+            if task["completed_date"]:
+                if task["completed_date"] in xp_by_date:
+                    xp_by_date[task["completed_date"]] += calculate_xp(task["priority"])
+                else:
+                    xp_by_date[task["completed_date"]] = calculate_xp(task["priority"])
+
+    for completed_date in xp_by_date:
+            if xp_by_date[completed_date] > most_xp_day:
+                most_xp_day = xp_by_date[completed_date]
+
+    return most_xp_day
+
+def calc_stats_this_week(tasks):
+
+    today = date.today()
+    week_start = today - timedelta(days=today.weekday())
+
+    xp_this_week = 0
+    completed_this_week = 0 
+
+    for task in tasks:        
+            if task["completed_date"]:
+                task_date = date.fromisoformat(task["completed_date"])
+    
+                if task_date >= week_start and task_date <= today:
+                    completed_this_week += 1
+                    xp_this_week += calculate_xp(task["priority"])
+
+    return xp_this_week, completed_this_week
+
+def calc_completion_rate(tasks):
+
+    completed_tasks, _, total_tasks = calc_completed_tasks(tasks)
+    _ , completed_this_week = calc_stats_this_week(tasks)
+    today = date.today()
+    days_this_week = today.weekday() +1
 
     if total_tasks > 0:
-        completion_rate = completed_tasks / total_tasks * 100
-        completion_rate = round(completion_rate)
-        daily_average = round(completed_this_week / days_this_week, 1)
+            completion_rate = completed_tasks / total_tasks * 100
+            completion_rate = round(completion_rate)
+            daily_average = round(completed_this_week / days_this_week, 1)
     else:
         completion_rate = 0
+        daily_average = 0
+
+    return completion_rate, daily_average
+
+def view_stats(tasks, stats):
+    
+    completed_tasks, remaining_tasks, total_tasks = calc_completed_tasks(tasks)
+    high_prio, medium_prio, low_prio = calc_task_prio_stats(tasks)
+    category_counts = calc_task_category_count(tasks)
+    completed_today = calc_completed_today(tasks)
+    most_tasks_day = calc_most_tasks_day(tasks)
+    xp_today = calc_xp_today(tasks)
+    most_xp_day = calc_most_xp_day(tasks)
+    xp_this_week, completed_this_week = calc_stats_this_week(tasks) 
+    completion_rate, daily_average = calc_completion_rate(tasks)
 
     print("📊 TaskForge Stats:")
     print("===============================")
@@ -327,6 +376,44 @@ def view_stats(tasks, stats):
 
     else:
         print("😢 No task stats available")
+
+# =======================
+# TASK MANAGEMENT
+# =======================
+
+def add_task(tasks, task):
+
+    tasks.append(task)
+    print("Task added:", task["text"], task["priority"])
+    print("Your task has been saved!")
+
+def view_tasks(tasks):
+
+    if not tasks:
+        print("You dont have any tasks yet!")
+        return
+    
+    print("\n📋Your tasks")
+    print("----------")
+
+    for number, task in enumerate(tasks, 1):
+
+        if task["completed"]:
+            status = "[✅]"
+        else:
+            status = "[🔳]"
+        print(status, number, ".", task["text"], task["priority"], task["category"])
+        if task["notes"]:
+            print("    📝", task["notes"])
+        if task["due_date"]:
+            due_date = date.fromisoformat(task["due_date"])
+            today = date.today()
+            print("    📅 Due:", task["due_date"])
+            if not task["completed"]:
+                if due_date < today:
+                    print("⚠  Overdue!")
+                elif due_date == today:
+                    print("Due Today!")
 
 def complete_task(tasks):
 
@@ -404,10 +491,18 @@ def search_tasks(tasks):
 
     if not found:
         print("No matching tasks found")
-  
+
+# =======================
+# UI 
+# =======================
+
 def say_goodbye():
 
     print("Goodbye!")
+
+# =======================
+# MAIN PROGRAM
+# =======================
 
 stats = load_stats()
 tasks = load_tasks()
