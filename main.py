@@ -21,54 +21,59 @@ def say_goodbye():
 stats = load_stats()
 tasks = load_tasks()
 
-while True:
+def main():
 
-    print("1. Add Task")
-    print("2. View Tasks")
-    print("3. View Stats")
-    print("4. Search Tasks")
-    print("5. Complete Task")
-    print("6. Delete Task")
-    print("7. Exit")
+    while True:
 
-    choice = input("Choose an option:")
+        print("1. Add Task")
+        print("2. View Tasks")
+        print("3. View Stats")
+        print("4. Search Tasks")
+        print("5. Complete Task")
+        print("6. Delete Task")
+        print("7. Exit")
 
-    if choice == "1":
-        task = get_task()
-        add_task(tasks, task)
-        save_tasks(tasks)
-        
-    elif choice == "2":
-        view_tasks(tasks)
+        choice = input("Choose an option:")
 
-    elif choice == "3":
-        view_stats(tasks, stats)
-
-    elif choice == "4":
-        search_tasks(tasks)
-
-    elif choice == "5":
-        completed_task = complete_task(tasks)
-
-        if completed_task:
-            earned_xp = calculate_xp(completed_task["priority"])
-            stats["xp"] += earned_xp
-            calc_streak(stats)
+        if choice == "1":
+            task = get_task()
+            add_task(tasks, task)
             save_tasks(tasks)
-            save_stats(stats)
             
-            print("🎉 Task completed!")
-            print("⭐ +", earned_xp, "XP")
-            print("⭐ Total XP:", stats["xp"])
-            print("🔥 Current Streak:", stats["streak"])    
-        
-    elif choice == "6":
-        if delete_task(tasks):
-            save_tasks(tasks)
+        elif choice == "2":
+            view_tasks(tasks)
 
-    elif choice == "7":
-        say_goodbye()
-        break 
+        elif choice == "3":
+            view_stats(tasks, stats)
 
-    else:
-        print("That isn't a valid option.")
+        elif choice == "4":
+            search_tasks(tasks)
+
+        elif choice == "5":
+            completed_task = complete_task(tasks)
+
+            if completed_task:
+                earned_xp = calculate_xp(completed_task["priority"])
+                stats["xp"] += earned_xp
+                calc_streak(stats)
+                save_tasks(tasks)
+                save_stats(stats)
+                
+                print("🎉 Task completed!")
+                print("⭐ +", earned_xp, "XP")
+                print("⭐ Total XP:", stats["xp"])
+                print("🔥 Current Streak:", stats["streak"])    
+            
+        elif choice == "6":
+            if delete_task(tasks):
+                save_tasks(tasks)
+
+        elif choice == "7":
+            say_goodbye()
+            break 
+
+        else:
+            print("That isn't a valid option.")
+
+if __name__ == "__main__":
+    main()

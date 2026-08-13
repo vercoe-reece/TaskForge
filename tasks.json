@@ -1,0 +1,47 @@
+[
+    {
+        "text": "do python stuff",
+        "completed": true,
+        "priority": "🔴 High",
+        "notes": "jajaja",
+        "due_date": "2026-08-11",
+        "category": "📚 Learning",
+        "completed_date": ""
+    },
+    {
+        "text": "test streaks",
+        "completed": true,
+        "priority": "🔴 High",
+        "notes": "testing testing 129",
+        "due_date": "2026-08-12",
+        "category": "📚 Learning",
+        "completed_date": ""
+    },
+    {
+        "text": "refactor view_stats",
+        "completed": true,
+        "priority": "🔴 High",
+        "notes": "break into functions, defeat the beats!",
+        "due_date": "2026-08-12",
+        "category": "📚 Learning",
+        "completed_date": "2026-08-13"
+    },
+    {
+        "text": "get another job",
+        "completed": false,
+        "priority": "🔴 High",
+        "notes": "",
+        "due_date": "",
+        "category": "💼 Work",
+        "completed_date": ""
+    },
+    {
+        "text": "test imports",
+        "completed": true,
+        "priority": "🟠 Medium",
+        "notes": "",
+        "due_date": "",
+        "category": "💼 Work",
+        "completed_date": "2026-08-13"
+    }
+]

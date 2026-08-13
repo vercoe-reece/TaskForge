@@ -1,47 +1,19 @@
+import json
+
 def load_tasks():
-    tasks = []
     try: 
-        with open("tasks.txt", "r", encoding="utf-8") as file:
-            rawtasks = file.readlines()
-            for task in rawtasks:
-                task = task.strip()
-                parts = task.split("|")
-                if len(parts)>= 4:
-                    notes = parts[3]
-                else:
-                    notes = ""
-                if len(parts)>= 5:
-                    due = parts[4]
-                else:
-                    due = ""
-                if len(parts)>= 6:
-                    category = parts[5]
-                else:
-                    category = "📦 Other"
-                if len(parts)>= 7:
-                    completed_date = parts[6]
-                else:
-                    completed_date = ""
-                stripped_task = {
-                    "text": parts[0],
-                    "completed": parts[1] == "True",
-                    "priority": parts[2],
-                    "notes": notes,
-                    "due_date": due,
-                    "category": category,
-                    "completed_date": completed_date
-                }  
-                tasks.append(stripped_task)
+        with open("tasks.json", "r", encoding="utf-8") as file:
+            tasks = json.load(file)
             return tasks
+
     except Exception as error:
         print("There was a problem loading your tasks:", error)
         return []
 
 def save_tasks(tasks):
     try:
-        with open("tasks.txt", "w", encoding="utf-8") as file:
-            for task in tasks:
-                file.write(task["text"] + "|" + str(task["completed"]) + "|" + (task["priority"]) + "|" + (task["notes"]) + "|" + (task["due_date"]) + "|" + (task["category"]) + "|" + (task["completed_date"]) + "\n")
+        with open("tasks.json", "w", encoding="utf-8") as file:
+            json.dump(tasks, file, indent = 4, ensure_ascii=False)
     except Exception as error:
         print("There was a problem saving your tasks", error)
 
