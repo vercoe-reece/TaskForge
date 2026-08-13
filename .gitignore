@@ -1,3 +1,5 @@
 tasks.txt
 stats.txt
-_pycache_/
+tasks.json
+stats.json
+__pycache__/

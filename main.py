@@ -3,7 +3,7 @@ print("     TASKFORGE      ")
 print("====================")
 
 from storage import load_tasks, save_tasks, load_stats, save_stats
-from stats import calculate_xp, calc_streak, view_stats
+from stats import calculate_xp, calc_streak, view_stats 
 from tasks import add_task, view_tasks, search_tasks, complete_task, delete_task, get_task
 
 # =======================
