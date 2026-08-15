@@ -4,7 +4,7 @@ print("====================")
 
 from storage import load_tasks, save_tasks, load_stats, save_stats
 from stats import calculate_xp, calc_streak, view_stats 
-from tasks import add_task, view_tasks, search_tasks, complete_task, delete_task, get_task
+from tasks import add_task, view_tasks, search_tasks, complete_task, delete_task, get_task, edit_task
 
 # =======================
 # UI 
@@ -18,10 +18,9 @@ def say_goodbye():
 # MAIN PROGRAM
 # =======================
 
-stats = load_stats()
-tasks = load_tasks()
-
 def main():
+    stats = load_stats()
+    tasks = load_tasks()
 
     while True:
 
@@ -30,8 +29,9 @@ def main():
         print("3. View Stats")
         print("4. Search Tasks")
         print("5. Complete Task")
-        print("6. Delete Task")
-        print("7. Exit")
+        print("6. Edit Task")
+        print("7. Delete Task")
+        print("8. Exit")
 
         choice = input("Choose an option:")
 
@@ -63,12 +63,16 @@ def main():
                 print("⭐ +", earned_xp, "XP")
                 print("⭐ Total XP:", stats["xp"])
                 print("🔥 Current Streak:", stats["streak"])    
-            
+
         elif choice == "6":
+            if edit_task(tasks):
+                save_tasks(tasks)
+            
+        elif choice == "7":
             if delete_task(tasks):
                 save_tasks(tasks)
 
-        elif choice == "7":
+        elif choice == "8":
             say_goodbye()
             break 
 

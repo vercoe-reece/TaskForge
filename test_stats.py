@@ -155,6 +155,9 @@ def test_calc_completion_rate():
     today = date.today()
     yesterday = date.today() - timedelta(days=1)
 
+    days_this_week = today.weekday() +1
+    expected_average = round(3 / days_this_week, 1)
+
     tasks = [
         {"completed": True, "completed_date": str(today), "priority": "🔴 High"},
         {"completed": True, "completed_date": str(yesterday), "priority": "🔴 High"},
@@ -165,7 +168,7 @@ def test_calc_completion_rate():
     completion_rate, daily_average = calc_completion_rate(tasks)
 
     assert completion_rate == 75
-    assert daily_average == 0.8
+    assert daily_average == expected_average
     
 def test_calc_completion_rate_empty():
 
