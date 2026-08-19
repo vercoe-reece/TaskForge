@@ -1,6 +1,7 @@
 from stats import calculate_xp, calc_completed_tasks, calc_task_prio_stats, calc_task_category_count, calc_completed_today, calc_xp_today, calc_most_tasks_day, calc_most_xp_day, calc_stats_this_week, calc_completion_rate
 from datetime import date
 from datetime import timedelta
+from unittest.mock import patch
 
 def test_high_calculate_xp():
     assert calculate_xp("🔴 High") == 100
@@ -152,20 +153,24 @@ def test_calc_stats_this_week():
     assert completed_this_week == 3
 
 def test_calc_completion_rate():
-    today = date.today()
-    yesterday = date.today() - timedelta(days=1)
+    fake_today = date(2026, 8, 5)
+    yesterday = fake_today - timedelta(days=1)
 
-    days_this_week = today.weekday() +1
+    days_this_week = fake_today.weekday() +1
     expected_average = round(3 / days_this_week, 1)
 
     tasks = [
-        {"completed": True, "completed_date": str(today), "priority": "🔴 High"},
+        {"completed": True, "completed_date": str(fake_today), "priority": "🔴 High"},
         {"completed": True, "completed_date": str(yesterday), "priority": "🔴 High"},
         {"completed": False, "completed_date": "", "priority": "🔴 High"},
-        {"completed": True, "completed_date": str(today), "priority": "🔴 High"}
+        {"completed": True, "completed_date": str(fake_today), "priority": "🔴 High"}
     ]
 
-    completion_rate, daily_average = calc_completion_rate(tasks)
+    with patch("stats.date") as mock_date:
+        mock_date.today.return_value = fake_today
+        mock_date.fromisoformat.side_effect = date.fromisoformat
+
+        completion_rate, daily_average = calc_completion_rate(tasks)
 
     assert completion_rate == 75
     assert daily_average == expected_average

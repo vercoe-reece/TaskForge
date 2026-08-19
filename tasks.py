@@ -17,7 +17,7 @@ def view_tasks(tasks):
     if not tasks:
         print("You dont have any tasks yet!")
         return
-    
+
     print("\n📋Your tasks")
     print("----------")
 
@@ -56,22 +56,22 @@ def complete_task(tasks):
     completed_task["completed_date"] = str(date.today())
 
     return completed_task
-    
+
 def delete_task(tasks):
 
     task_number = choose_task(tasks)
 
     if task_number is False:
         return False
-    
+
     deleted_task = tasks.pop(task_number)
     print("Task deleted:", deleted_task["text"])
     return True
-    
+
 def search_tasks(tasks):
     search = input("Enter the keyword you'd like to search for: \n >>>").lower()
     found = False
-    
+
     print("🖊   Search results:")
     print("---------------")
 
@@ -153,7 +153,7 @@ def get_priority(allow_blank=False):
 
         if allow_blank and not priority:
             return ""
-        
+
         if priority == "1":
             return "🔴 High"
         elif priority == "2":
@@ -170,7 +170,7 @@ def get_priority(allow_blank=False):
 
 def get_edit_details():
     changes = {}
-        
+
     task_text = input("What would you like to change this task to?")
     if task_text:
         changes["text"] = task_text
@@ -186,8 +186,8 @@ def get_edit_details():
     task_category = get_category(allow_blank=True)
     if task_category:
         changes["category"] = task_category
-        
-    return changes  
+
+    return changes
 
 def apply_changes(task, changes):
     for key, value in changes.items():
@@ -228,3 +228,94 @@ def edit_task(tasks):
 
     edited_task = apply_changes(tasks[task_number], changes)
     return edited_task
+
+# ===========================
+# TASK FILTERING / SORTING
+# ===========================
+
+def sort_tasks_by_priority(tasks):
+    return sorted(
+        tasks,
+        key=lambda task: assign_priority_value(task["priority"])
+    )
+
+def sort_tasks_by_due_date(tasks):
+    return sorted(
+        tasks,
+        key=lambda task: (task["due_date"] == "", task["due_date"])
+    )
+
+def sort_tasks_by_status(tasks):
+    return sorted(
+        tasks,
+        key=lambda task: task["completed"]
+    )
+
+def assign_priority_value(priority):
+    priority_value = {
+            "🔴 High": 1,
+            "🟠 Medium": 2,
+            "🟢 Low": 3
+        }
+
+    return priority_value[priority]
+
+def assign_status_value(status):
+    status_value = {
+        "completed": True,
+        "incomplete": False
+    }
+
+    return status_value[status]
+
+def sort_tasks_default(tasks):
+    return sorted(
+        tasks,
+        key=lambda task: (task["completed"], task["due_date"] == "", task["due_date"], assign_priority_value(task["priority"]))
+    )
+
+def handle_view_tasks(tasks):
+    sorted_tasks = sort_tasks_default(tasks)
+    view_tasks(sorted_tasks)
+
+    while True:
+
+        sort_choice = input("Sort tasks by: \n\n 1. Due Date \n 2. Priority \n 3. Status \n 4. Default \n 5. Back \n >>>")
+
+        if sort_choice == "1":
+            sorted_by_date = sort_tasks_by_due_date(tasks)
+            view_tasks(sorted_by_date)
+
+        elif sort_choice == "2":
+            sorted_by_prio = sort_tasks_by_priority(tasks)
+            view_tasks(sorted_by_prio)
+
+        elif sort_choice == "3":
+            sorted_by_status = sort_tasks_by_status(tasks)
+            view_tasks(sorted_by_status)
+
+        elif sort_choice == "4":
+            sorted_by_default = sort_tasks_default(tasks)
+            view_tasks(sorted_by_default)
+
+        elif sort_choice == "5":
+            return
+
+        else:
+            print("Please choose a valid option")
+
+def apply_filters(tasks, filters):
+    filtered_tasks = []
+
+    for task in tasks:
+        if (
+            (filters["category"] == "" or task["category"] == filters["category"])
+            and (filters["priority"] == "" or task["priority"] == filters["priority"])
+            and (
+                filters["status"] == ""
+                or task["completed"] == assign_status_value(filters["status"])
+            )
+        ):
+            filtered_tasks.append(task)
+
+    return filtered_tasks

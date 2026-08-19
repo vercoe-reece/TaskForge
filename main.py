@@ -4,7 +4,7 @@ print("====================")
 
 from storage import load_tasks, save_tasks, load_stats, save_stats
 from stats import calculate_xp, calc_streak, view_stats 
-from tasks import add_task, view_tasks, search_tasks, complete_task, delete_task, get_task, edit_task
+from tasks import add_task, view_tasks, search_tasks, complete_task, delete_task, get_task, edit_task, handle_view_tasks
 
 # =======================
 # UI 
@@ -41,7 +41,7 @@ def main():
             save_tasks(tasks)
             
         elif choice == "2":
-            view_tasks(tasks)
+            handle_view_tasks(tasks)
 
         elif choice == "3":
             view_stats(tasks, stats)
