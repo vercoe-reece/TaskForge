@@ -275,35 +275,29 @@ def sort_tasks_default(tasks):
     )
 
 def handle_view_tasks(tasks):
-    sorted_tasks = sort_tasks_default(tasks)
-    view_tasks(sorted_tasks)
+    filters = {
+        "category": "",
+        "priority": "",
+        "status": ""
+    }
+
+    current_tasks = sort_tasks_default(tasks)
 
     while True:
+        view_tasks(current_tasks)
+        choice = input(" 1. Sort \n 2. Filter \n 3. Back")
+        if choice == "1":
+            sorted_result = handle_sort_menu(current_tasks)
+            if sorted_result is not None:
+                current_tasks = sorted_result
+            else: 
+                print("Please choose a valid option")
 
-        sort_choice = input("Sort tasks by: \n\n 1. Due Date \n 2. Priority \n 3. Status \n 4. Default \n 5. Back \n >>>")
-
-        if sort_choice == "1":
-            sorted_by_date = sort_tasks_by_due_date(tasks)
-            view_tasks(sorted_by_date)
-
-        elif sort_choice == "2":
-            sorted_by_prio = sort_tasks_by_priority(tasks)
-            view_tasks(sorted_by_prio)
-
-        elif sort_choice == "3":
-            sorted_by_status = sort_tasks_by_status(tasks)
-            view_tasks(sorted_by_status)
-
-        elif sort_choice == "4":
-            sorted_by_default = sort_tasks_default(tasks)
-            view_tasks(sorted_by_default)
-
-        elif sort_choice == "5":
+        elif choice == "2":
+            pass
+        elif choice == "3":
             return
-
-        else:
-            print("Please choose a valid option")
-
+        
 def apply_filters(tasks, filters):
     filtered_tasks = []
 
@@ -319,3 +313,30 @@ def apply_filters(tasks, filters):
             filtered_tasks.append(task)
 
     return filtered_tasks
+
+def handle_sort_menu(current_tasks):
+    while True:
+    
+            sort_choice = input("Sort tasks by: \n\n 1. Due Date \n 2. Priority \n 3. Status \n 4. Default \n 5. Back \n >>>")
+    
+            if sort_choice == "1":
+                sorted_by_date = sort_tasks_by_due_date(current_tasks)
+                return sorted_by_date
+    
+            elif sort_choice == "2":
+                sorted_by_prio = sort_tasks_by_priority(current_tasks)
+                return sorted_by_prio
+    
+            elif sort_choice == "3":
+                sorted_by_status = sort_tasks_by_status(current_tasks)
+                return sorted_by_status
+    
+            elif sort_choice == "4":
+                sorted_by_default = sort_tasks_default(current_tasks)
+                return sorted_by_default
+    
+            elif sort_choice == "5":
+                return None
+    
+            else:
+                print("Please choose a valid option")

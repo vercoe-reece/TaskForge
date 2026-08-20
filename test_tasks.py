@@ -453,8 +453,9 @@ def test_handle_view_tasks_priority_sort(monkeypatch):
 
     displayed_lists = []
     responses = iter([
+        "1",
         "2",
-        "5"
+        "3"
     ])
     monkeypatch.setattr("builtins.input", lambda _: next(responses))
 
